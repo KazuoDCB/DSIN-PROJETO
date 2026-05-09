@@ -46,4 +46,5 @@ public class OperationResult<T> : OperationResult
     public static new OperationResult<T> Forbidden(ErrorMessage error) => new OperationResult<T>(HttpStatusCode.Forbidden, default, [error]);
     public static new OperationResult<T> UnprocessableEntity(IEnumerable<ErrorMessage> erros) => new OperationResult<T>(HttpStatusCode.UnprocessableEntity, default, erros);
     public static new OperationResult<T> UnprocessableEntity(ErrorMessage erros) => new OperationResult<T>(HttpStatusCode.UnprocessableEntity, default, [erros]);
+    public static new OperationResult<T> FatalError(ErrorMessage error) => new OperationResult<T>(HttpStatusCode.InternalServerError, default, [error]);
 }
