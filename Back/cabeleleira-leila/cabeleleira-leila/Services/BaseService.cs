@@ -21,34 +21,31 @@ public abstract class BaseService<TEntity, TRequest, TUpdateRequest, TResponse, 
         Mapper = mapper;
     }
 
-    public virtual async Task<OperationResult<List<TResponse>>> GetAllAsync(
+    public virtual OperationResult<List<TResponse>> GetAll(
         int page,
-        int size,
-        CancellationToken cancellationToken = default)
+        int size)
     {
-        var entities = await Repository.GetAllAsync(page, size, cancellationToken);
+        var entities = Repository.GetAll(page, size);
 
         return OperationResult<List<TResponse>>.Ok(Mapper.Map<List<TResponse>>(entities));
     }
 
-    public virtual async Task<OperationResult<TResponse>> GetByIdAsync(
-        TKey id,
-        CancellationToken cancellationToken = default)
+    public virtual OperationResult<TResponse> GetById(TKey id)
     {
-        var entity = await Repository.GetByIdAsync(id, cancellationToken);
+        var entity = Repository.GetById(id);
 
         if (entity is null) return OperationResult<TResponse>.NotFound(NotFoundError());
 
         return OperationResult<TResponse>.Ok(Mapper.Map<TResponse>(entity));
     }
 
-    public virtual async Task<OperationResult> DeleteAsync(TKey id, CancellationToken cancellationToken = default)
+    public virtual OperationResult Delete(TKey id)
     {
-        var entity = await Repository.GetByIdAsync(id, cancellationToken);
+        var entity = Repository.GetById(id);
 
         if (entity is null) return OperationResult.NotFound(NotFoundError());
 
-        await Repository.DeleteAsync(entity, cancellationToken);
+        Repository.Delete(entity);
 
         return OperationResult.Ok();
     }

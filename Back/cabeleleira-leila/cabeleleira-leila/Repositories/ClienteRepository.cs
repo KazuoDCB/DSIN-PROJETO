@@ -5,24 +5,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace cabeleleira_leila.Repositories;
 
-public class ClienteRepository : BaseRepository<Cliente, long>, IClienteRepository
+public class ClienteRepository : BaseRepository<User, long>, IClienteRepository
 {
     public ClienteRepository(Cabeleleira_LeilaDbContext context) : base(context)
     {
     }
 
-    public Cliente? GetByEmail(string email)
+    public User? GetByEmail(string email)
     {
+        var normalizedEmail = email.Trim().ToLowerInvariant();
+
         return Context
-            .Set<Cliente>()
+            .Set<User>()
             .AsNoTracking()
-            .FirstOrDefault(cliente => cliente.Email == email);
+            .FirstOrDefault(User => User.Email.ToLower() == normalizedEmail);
     }
 
-    public async Task<bool> EmailExistsAsync(string email, long? ignoredId, CancellationToken cancellationToken = default)
+    public bool EmailExists(string email, long? ignoredId)
     {
-        return await Context
-            .Set<Cliente>()
-            .AnyAsync(cliente => cliente.Email == email && cliente.Id != ignoredId, cancellationToken);
+        var normalizedEmail = email.Trim().ToLowerInvariant();
+
+        return Context
+            .Set<User>()
+            .Any(User => User.Email.ToLower() == normalizedEmail && User.Id != ignoredId);
     }
 }

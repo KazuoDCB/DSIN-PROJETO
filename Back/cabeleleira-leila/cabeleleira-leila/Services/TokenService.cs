@@ -44,6 +44,7 @@ public class TokenService : ITokenService
         claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, cliente.Id.ToString()));
         claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, cliente.Name));
         claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, cliente.Email));
+        claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, cliente.Role.ToString()));
 
         return claimsIdentity;
     }

@@ -27,18 +27,30 @@ public class AuthService : IAuthService
 
     public OperationResult<LoginResponseDto> Login(LoginRequestDto request)
     {
-        var cliente = _clienteRepository.GetByEmail(request.Email);
+        return LoginByRole(request, UserRole.Cliente);
+    }
 
-        if (cliente is null) return Unauthorized();
-        if (!_passwordHashService.Verify(request.Password, cliente.PasswordHash)) return Unauthorized();
-        if (cliente.Status is Status.Inativo) return OperationResult<LoginResponseDto>.Forbidden(Error("Cliente", "Cliente inativo."));
+    public OperationResult<LoginResponseDto> AdminLogin(LoginRequestDto request)
+    {
+        return LoginByRole(request, UserRole.Admin);
+    }
 
-        var clienteResponse = _mapper.Map<ClienteResponseDto>(cliente);
+    private OperationResult<LoginResponseDto> LoginByRole(LoginRequestDto request, UserRole expectedRole)
+    {
+        var user = _clienteRepository.GetByEmail(request.Email);
+
+        if (user is null) return Unauthorized();
+        if (!_passwordHashService.Verify(request.Password, user.PasswordHash)) return Unauthorized();
+        if (user.Status is Status.Inativo) return OperationResult<LoginResponseDto>.Forbidden(Error("User", "Usuario inativo."));
+        if (user.Role != expectedRole) return OperationResult<LoginResponseDto>.Forbidden(Error("Role", "Usuario nao autorizado para este tipo de login."));
+
+        var userResponse = _mapper.Map<ClienteResponseDto>(user);
         var response = new LoginResponseDto
         {
-            AccessToken = _tokenService.Generate(clienteResponse),
+            AccessToken = _tokenService.Generate(userResponse),
             ExpiresAt = DateTime.UtcNow.AddHours(2),
-            Cliente = clienteResponse
+            Role = userResponse.Role,
+            Cliente = userResponse
         };
 
         return OperationResult<LoginResponseDto>.Ok(response);
@@ -48,7 +60,7 @@ public class AuthService : IAuthService
     {
         return OperationResult<LoginResponseDto>.Unauthorized(Error("Login", "Email ou senha inválidos."));
     }
-
+    
     private static ErrorMessage Error(string property, string message)
     {
         return ErrorMessage.CreateErrorMessage(property, message);

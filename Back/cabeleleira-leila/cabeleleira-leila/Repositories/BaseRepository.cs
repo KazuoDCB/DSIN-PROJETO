@@ -21,45 +21,45 @@ public abstract class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, T
         return Context.Set<TEntity>().AsQueryable();
     }
 
-    public async Task<List<TEntity>> GetAllAsync(int page, int size, CancellationToken cancellationToken = default)
+    public List<TEntity> GetAll(int page, int size)
     {
-        return await Context
+        return Context
             .Set<TEntity>()
             .AsNoTracking()
             .Skip((page - 1) * size)
             .Take(size)
-            .ToListAsync(cancellationToken);
+            .ToList();
     }
 
-    public async Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default)
+    public TEntity? GetById(TKey id)
     {
-        return await Context.Set<TEntity>().FindAsync([id], cancellationToken);
+        return Context.Set<TEntity>().Find(id);
     }
 
-    public async Task<bool> ExistsAsync(TKey id, CancellationToken cancellationToken = default)
+    public bool Exists(TKey id)
     {
         var convertedId = Convert.ToInt64(id);
 
-        return await Context
+        return Context
             .Set<TEntity>()
-            .AnyAsync(entity => entity.Id == convertedId, cancellationToken);
+            .Any(entity => entity.Id == convertedId);
     }
 
-    public async Task CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public void Create(TEntity entity)
     {
-        await Context.Set<TEntity>().AddAsync(entity, cancellationToken);
-        await Context.SaveChangesAsync(cancellationToken);
+        Context.Set<TEntity>().Add(entity);
+        Context.SaveChanges();
     }
 
-    public async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public void Update(TEntity entity)
     {
         Context.Set<TEntity>().Update(entity);
-        await Context.SaveChangesAsync(cancellationToken);
+        Context.SaveChanges();
     }
 
-    public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public void Delete(TEntity entity)
     {
         Context.Set<TEntity>().Remove(entity);
-        await Context.SaveChangesAsync(cancellationToken);
+        Context.SaveChanges();
     }
 }

@@ -8,6 +8,6 @@ public class ClienteMappingConfig : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<Cliente, ClienteResponseDto>();
+        config.NewConfig<User, ClienteResponseDto>();
     }
 }

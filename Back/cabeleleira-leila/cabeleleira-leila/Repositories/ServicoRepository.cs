@@ -11,22 +11,24 @@ public class ServicoRepository : BaseRepository<Servico, long>, IServicoReposito
     {
     }
 
-    public async Task<List<Servico>> GetByIdsAsync(IEnumerable<long> ids, CancellationToken cancellationToken = default)
+    public List<Servico> GetByIds(IEnumerable<long> ids)
     {
         var uniqueIds = ids
             .Distinct()
             .ToList();
 
-        return await Context
+        return Context
             .Set<Servico>()
             .Where(servico => uniqueIds.Contains(servico.Id))
-            .ToListAsync(cancellationToken);
+            .ToList();
     }
 
-    public async Task<bool> NameExistsAsync(string name, long? ignoredId, CancellationToken cancellationToken = default)
+    public bool NameExists(string name, long? ignoredId)
     {
-        return await Context
+        var normalizedName = name.Trim().ToLowerInvariant();
+
+        return Context
             .Set<Servico>()
-            .AnyAsync(servico => servico.Name == name && servico.Id != ignoredId, cancellationToken);
+            .Any(servico => servico.Name.ToLower() == normalizedName && servico.Id != ignoredId);
     }
 }

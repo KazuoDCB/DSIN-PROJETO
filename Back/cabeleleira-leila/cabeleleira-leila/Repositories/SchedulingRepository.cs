@@ -11,21 +11,20 @@ public class SchedulingRepository : BaseRepository<Scheduling, long>, ISchedulin
     {
     }
 
-    public async Task<List<Scheduling>> GetAllWithDetailsAsync(int page, int size, CancellationToken cancellationToken = default)
+    public List<Scheduling> GetAllWithDetails(int page, int size)
     {
-        return await SchedulingQuery()
+        return SchedulingQuery()
             .AsNoTracking()
             .OrderBy(scheduling => scheduling.DataHora)
             .Skip((page - 1) * size)
             .Take(size)
-            .ToListAsync(cancellationToken);
+            .ToList();
     }
 
-    public async Task<List<Scheduling>> GetByClienteWithDetailsAsync(
+    public List<Scheduling> GetByClienteWithDetails(
         long clienteId,
         DateTime? start,
-        DateTime? end,
-        CancellationToken cancellationToken = default)
+        DateTime? end)
     {
         var query = SchedulingQuery()
             .AsNoTracking()
@@ -34,51 +33,49 @@ public class SchedulingRepository : BaseRepository<Scheduling, long>, ISchedulin
         if (start.HasValue) query = query.Where(scheduling => scheduling.DataHora >= start.Value);
         if (end.HasValue) query = query.Where(scheduling => scheduling.DataHora <= end.Value);
 
-        return await query
+        return query
             .OrderByDescending(scheduling => scheduling.DataHora)
-            .ToListAsync(cancellationToken);
+            .ToList();
     }
 
-    public async Task<Scheduling?> GetWithDetailsAsync(
+    public Scheduling? GetWithDetails(
         long id,
-        bool asNoTracking,
-        CancellationToken cancellationToken = default)
+        bool asNoTracking)
     {
         var query = SchedulingQuery();
 
         if (asNoTracking) query = query.AsNoTracking();
 
-        return await query.FirstOrDefaultAsync(scheduling => scheduling.Id == id, cancellationToken);
+        return query.FirstOrDefault(scheduling => scheduling.Id == id);
     }
 
-    public async Task<Scheduling?> GetSameWeekAsync(
+    public Scheduling? GetSameWeek(
         long clienteId,
-        DateTime dataHora,
-        CancellationToken cancellationToken = default)
+        DateTime dataHora)
     {
         var weekStart = dataHora.Date.AddDays(-(int)dataHora.DayOfWeek);
         var weekEnd = weekStart.AddDays(7);
 
-        return await SchedulingQuery()
+        return SchedulingQuery()
             .AsNoTracking()
             .Where(scheduling => scheduling.ClienteId == clienteId)
             .Where(scheduling => scheduling.DataHora >= weekStart && scheduling.DataHora < weekEnd)
             .OrderBy(scheduling => scheduling.DataHora)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefault();
     }
 
-    public async Task<bool> HasSchedulingAtAsync(DateTime dataHora, long? ignoredId, CancellationToken cancellationToken = default)
+    public bool HasSchedulingAt(DateTime dataHora, long? ignoredId)
     {
-        return await Context
+        return Context
             .Set<Scheduling>()
-            .AnyAsync(scheduling => scheduling.DataHora == dataHora && scheduling.Id != ignoredId, cancellationToken);
+            .Any(scheduling => scheduling.DataHora == dataHora && scheduling.Id != ignoredId);
     }
 
     private IQueryable<Scheduling> SchedulingQuery()
     {
         return Context
             .Set<Scheduling>()
-            .Include(scheduling => scheduling.Cliente)
+            .Include(scheduling => scheduling.User)
             .Include(scheduling => scheduling.Servicos);
     }
 }
