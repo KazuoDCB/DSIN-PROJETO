@@ -18,20 +18,19 @@ public class ServicosController :
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] ServicoRequestDto request, CancellationToken cancellationToken)
+    public IActionResult Create([FromBody] ServicoRequestDto request)
     {
-        OperationResult<ServicoResponseDto> result = await _servicoService.CreateAsync(request, cancellationToken);
+        OperationResult<ServicoResponseDto> result = _servicoService.Create(request);
 
         return StatusCode((int)result.StatusCode, result);
     }
 
     [HttpPut("{id:long}")]
-    public async Task<IActionResult> Update(
+    public IActionResult Update(
         long id,
-        [FromBody] ServicoUpdateRequestDto request,
-        CancellationToken cancellationToken)
+        [FromBody] ServicoUpdateRequestDto request)
     {
-        OperationResult<ServicoResponseDto> result = await _servicoService.UpdateAsync(id, request, cancellationToken);
+        OperationResult<ServicoResponseDto> result = _servicoService.Update(id, request);
 
         return StatusCode((int)result.StatusCode, result);
     }

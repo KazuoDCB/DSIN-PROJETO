@@ -18,20 +18,19 @@ public class ClientesController :
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] ClienteRequestDto request, CancellationToken cancellationToken)
+    public IActionResult Create([FromBody] ClienteRequestDto request)
     {
-        OperationResult<ClienteResponseDto> result = await _clienteService.CreateAsync(request, cancellationToken);
+        OperationResult<ClienteResponseDto> result = _clienteService.Create(request);
 
         return StatusCode((int)result.StatusCode, result);
     }
 
     [HttpPut("{id:long}")]
-    public async Task<IActionResult> Update(
+    public IActionResult Update(
         long id,
-        [FromBody] ClienteUpdateRequestDto request,
-        CancellationToken cancellationToken)
+        [FromBody] ClienteUpdateRequestDto request)
     {
-        OperationResult<ClienteResponseDto> result = await _clienteService.UpdateAsync(id, request, cancellationToken);
+        OperationResult<ClienteResponseDto> result = _clienteService.Update(id, request);
 
         return StatusCode((int)result.StatusCode, result);
     }

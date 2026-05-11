@@ -24,4 +24,13 @@ public class AuthController : ControllerBase
 
         return this.ToActionResult(result);
     }
+
+    [AllowAnonymous]
+    [HttpPost("admin/login")]
+    public IActionResult AdminLogin([FromBody] LoginRequestDto request)
+    {
+        var result = _authService.AdminLogin(request);
+
+        return this.ToActionResult(result);
+    }
 }

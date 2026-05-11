@@ -19,30 +19,29 @@ public abstract class BaseController<TRequest, TUpdateRequest, TResponse, TServi
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(
+    public IActionResult GetAll(
         [FromQuery] int size = 12,
-        [FromQuery] int page = 1,
-        CancellationToken cancellationToken = default)
+        [FromQuery] int page = 1)
     {
         if (size <= 0 || page <= 0) return BadRequest("Size e page devem ser maiores que zero.");
 
-        OperationResult<List<TResponse>> result = await Service.GetAllAsync(page, size, cancellationToken);
+        OperationResult<List<TResponse>> result = Service.GetAll(page, size);
 
         return StatusCode((int)result.StatusCode, result);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(TKey id, CancellationToken cancellationToken)
+    public IActionResult GetById(TKey id)
     {
-        OperationResult<TResponse> result = await Service.GetByIdAsync(id, cancellationToken);
+        OperationResult<TResponse> result = Service.GetById(id);
 
         return StatusCode((int)result.StatusCode, result);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(TKey id, CancellationToken cancellationToken)
+    public IActionResult Delete(TKey id)
     {
-        OperationResult result = await Service.DeleteAsync(id, cancellationToken);
+        OperationResult result = Service.Delete(id);
 
         return StatusCode((int)result.StatusCode, result);
     }
