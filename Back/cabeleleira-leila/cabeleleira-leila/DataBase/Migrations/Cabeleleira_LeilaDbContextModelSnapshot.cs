@@ -37,51 +37,6 @@ namespace cabeleleira_leila.Migrations
                     b.ToTable("SchedulingServicos", (string)null);
                 });
 
-            modelBuilder.Entity("cabeleleira_leila.Models.Cliente", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.ToTable("Clientes", (string)null);
-                });
-
             modelBuilder.Entity("cabeleleira_leila.Models.Scheduling", b =>
                 {
                     b.Property<long>("Id")
@@ -126,6 +81,11 @@ namespace cabeleleira_leila.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
                     b.Property<int>("Duration")
                         .HasColumnType("integer");
 
@@ -152,6 +112,54 @@ namespace cabeleleira_leila.Migrations
                     b.ToTable("Servicos", (string)null);
                 });
 
+            modelBuilder.Entity("cabeleleira_leila.Models.User", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users", (string)null);
+                });
+
             modelBuilder.Entity("SchedulingServico", b =>
                 {
                     b.HasOne("cabeleleira_leila.Models.Scheduling", null)
@@ -169,16 +177,16 @@ namespace cabeleleira_leila.Migrations
 
             modelBuilder.Entity("cabeleleira_leila.Models.Scheduling", b =>
                 {
-                    b.HasOne("cabeleleira_leila.Models.Cliente", "Cliente")
+                    b.HasOne("cabeleleira_leila.Models.User", "User")
                         .WithMany("Schedulings")
                         .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Cliente");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("cabeleleira_leila.Models.Cliente", b =>
+            modelBuilder.Entity("cabeleleira_leila.Models.User", b =>
                 {
                     b.Navigation("Schedulings");
                 });

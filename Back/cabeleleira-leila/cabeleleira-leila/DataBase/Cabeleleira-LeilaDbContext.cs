@@ -9,7 +9,7 @@ namespace cabeleleira_leila.DataBase
         {
         }
 
-        public DbSet<Cliente> Clientes => Set<Cliente>();
+        public DbSet<User> Users => Set<User>();
         public DbSet<Scheduling> Schedulings => Set<Scheduling>();
         public DbSet<Servico> Servicos => Set<Servico>();
 
@@ -18,13 +18,6 @@ namespace cabeleleira_leila.DataBase
             ApplyAuditDates();
 
             return base.SaveChanges();
-        }
-
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            ApplyAuditDates();
-
-            return base.SaveChangesAsync(cancellationToken);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,18 +31,19 @@ namespace cabeleleira_leila.DataBase
 
         private static void ConfigureCliente(ModelBuilder modelBuilder)
         {
-            var entity = modelBuilder.Entity<Cliente>();
+            var entity = modelBuilder.Entity<User>();
 
-            entity.ToTable("Clientes");
-            entity.HasKey(cliente => cliente.Id);
-            entity.Property(cliente => cliente.Name).HasMaxLength(150).IsRequired();
-            entity.Property(cliente => cliente.Number).HasMaxLength(20).IsRequired();
-            entity.Property(cliente => cliente.Email).HasMaxLength(255).IsRequired();
-            entity.Property(cliente => cliente.PasswordHash).HasMaxLength(512).IsRequired();
-            entity.HasIndex(cliente => cliente.Email).IsUnique();
+            entity.ToTable("Users");
+            entity.HasKey(User => User.Id);
+            entity.Property(User => User.Name).HasMaxLength(150).IsRequired();
+            entity.Property(User => User.Number).HasMaxLength(20).IsRequired();
+            entity.Property(User => User.Email).HasMaxLength(255).IsRequired();
+            entity.Property(User => User.PasswordHash).HasMaxLength(512).IsRequired();
+            entity.Property(User => User.Role).IsRequired();
+            entity.HasIndex(User => User.Email).IsUnique();
             entity
-                .HasMany(cliente => cliente.Schedulings)
-                .WithOne(scheduling => scheduling.Cliente)
+                .HasMany(User => User.Schedulings)
+                .WithOne(scheduling => scheduling.User)
                 .HasForeignKey(scheduling => scheduling.ClienteId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
@@ -61,6 +55,7 @@ namespace cabeleleira_leila.DataBase
             entity.ToTable("Servicos");
             entity.HasKey(servico => servico.Id);
             entity.Property(servico => servico.Name).HasMaxLength(120).IsRequired();
+            entity.Property(servico => servico.Description).HasMaxLength(500).IsRequired();
             entity.Property(servico => servico.Price).HasPrecision(10, 2);
             entity.Property(servico => servico.Duration).IsRequired();
             entity.HasIndex(servico => servico.Name).IsUnique();

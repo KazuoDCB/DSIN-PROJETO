@@ -13,32 +13,14 @@ namespace cabeleleira_leila.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Clientes",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Number = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    Passwordhash = table.Column<string>(type: "text", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clientes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Servicos",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    Name = table.Column<string>(type: "character varying(120)", maxLength: 120, nullable: false),
+                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
                     Duration = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -47,6 +29,26 @@ namespace cabeleleira_leila.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Servicos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    Number = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    PasswordHash = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,9 +67,33 @@ namespace cabeleleira_leila.Migrations
                 {
                     table.PrimaryKey("PK_Schedulings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Schedulings_Clientes_ClienteId",
+                        name: "FK_Schedulings_Users_ClienteId",
                         column: x => x.ClienteId,
-                        principalTable: "Clientes",
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SchedulingServicos",
+                columns: table => new
+                {
+                    SchedulingId = table.Column<long>(type: "bigint", nullable: false),
+                    ServicoId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SchedulingServicos", x => new { x.SchedulingId, x.ServicoId });
+                    table.ForeignKey(
+                        name: "FK_SchedulingServicos_Schedulings_SchedulingId",
+                        column: x => x.SchedulingId,
+                        principalTable: "Schedulings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SchedulingServicos_Servicos_ServicoId",
+                        column: x => x.ServicoId,
+                        principalTable: "Servicos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -76,11 +102,37 @@ namespace cabeleleira_leila.Migrations
                 name: "IX_Schedulings_ClienteId",
                 table: "Schedulings",
                 column: "ClienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Schedulings_DataHora",
+                table: "Schedulings",
+                column: "DataHora",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SchedulingServicos_ServicoId",
+                table: "SchedulingServicos",
+                column: "ServicoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Servicos_Name",
+                table: "Servicos",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "SchedulingServicos");
+
             migrationBuilder.DropTable(
                 name: "Schedulings");
 
@@ -88,7 +140,7 @@ namespace cabeleleira_leila.Migrations
                 name: "Servicos");
 
             migrationBuilder.DropTable(
-                name: "Clientes");
+                name: "Users");
         }
     }
 }
