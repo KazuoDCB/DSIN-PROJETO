@@ -1,0 +1,236 @@
+.hero-section {
+  display: grid;
+  min-height: 680px;
+  place-items: center;
+  padding: 8rem 1rem 6rem;
+  background:
+    linear-gradient(180deg, rgba(7, 7, 7, 0.2), rgba(7, 7, 7, 0.78)),
+    linear-gradient(90deg, rgba(7, 7, 7, 0.85), rgba(7, 7, 7, 0.18)),
+    url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1800&q=80') center/cover;
+}
+
+.hero-section__content {
+  display: grid;
+  width: min(760px, 100%);
+  justify-items: center;
+  gap: 1.2rem;
+  text-align: center;
+}
+
+.hero-section h1 {
+  font-size: 4rem;
+}
+
+.hero-section p {
+  max-width: 650px;
+  color: #f0f0f1;
+  font-size: 1.1rem;
+}
+
+.hero-section__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.public-section {
+  padding: 5rem 10vw;
+}
+
+.public-section--top {
+  padding-top: 7rem;
+}
+
+.public-section--muted {
+  background: #0c0c0c;
+}
+
+.section-title {
+  display: grid;
+  justify-items: center;
+  gap: 0.8rem;
+  max-width: 650px;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+
+.section-title h1,
+.section-title h2,
+.cta-section h2 {
+  font-size: 2.15rem;
+}
+
+.section-title p,
+.cta-section p,
+.about-page p {
+  color: var(--text);
+}
+
+.service-grid,
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.service-grid--compact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.feature-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.service-card,
+.feature-card {
+  display: grid;
+  min-height: 245px;
+  align-content: start;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.feature-card {
+  justify-items: center;
+  text-align: center;
+}
+
+.feature-card__icon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border-radius: var(--radius);
+  background: var(--surface-strong);
+  color: var(--accent);
+}
+
+.service-card p {
+  color: var(--text);
+}
+
+.service-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.service-card__meta strong,
+.about-page__stats strong {
+  color: var(--accent);
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+}
+
+.service-card__meta span {
+  color: var(--muted);
+}
+
+.cta-section {
+  display: grid;
+  min-height: 360px;
+  place-items: center;
+  gap: 1.2rem;
+  padding: 5rem 1rem;
+  text-align: center;
+}
+
+.about-page {
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) minmax(320px, 0.9fr);
+  align-items: center;
+  gap: 3rem;
+  padding: 8rem 10vw;
+}
+
+.about-page__media {
+  position: relative;
+  min-height: 500px;
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(7, 7, 7, 0.05), rgba(7, 7, 7, 0.35)),
+    url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=80') center/cover;
+}
+
+.about-page__badge {
+  position: absolute;
+  right: -1.6rem;
+  bottom: -1.6rem;
+  display: grid;
+  min-width: 190px;
+  gap: 0.2rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.about-page__badge strong {
+  color: var(--accent);
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+}
+
+.about-page__content {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.about-page__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.about-page__stats span {
+  display: grid;
+  gap: 0.2rem;
+  color: var(--text);
+  text-align: center;
+}
+
+@media (max-width: 1100px) {
+  .service-grid,
+  .service-grid--compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-page {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .hero-section {
+    min-height: 580px;
+  }
+
+  .hero-section h1 {
+    font-size: 2.6rem;
+  }
+
+  .public-section,
+  .about-page {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .service-grid,
+  .service-grid--compact,
+  .feature-grid,
+  .about-page__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .about-page__badge {
+    right: 1rem;
+    bottom: 1rem;
+  }
+}
