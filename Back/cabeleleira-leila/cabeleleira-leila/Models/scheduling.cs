@@ -5,7 +5,7 @@ namespace cabeleleira_leila.Models;
 public class Scheduling : BaseModel
 {
     public long ClienteId { get; set; }
-    public Cliente Cliente { get; set; } = null!;
+    public User User { get; set; } = null!;
     public DateTime DataHora { get; set; }
     public StatusAgendamento Status { get; set; }
     public ICollection<Servico> Servicos { get; set; } = [];
