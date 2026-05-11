@@ -7,10 +7,10 @@ public interface IBaseRepository<TEntity, TKey>
     where TKey : notnull
 {
     IQueryable<TEntity> Query();
-    Task<List<TEntity>> GetAllAsync(int page, int size, CancellationToken cancellationToken = default);
-    Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
-    Task<bool> ExistsAsync(TKey id, CancellationToken cancellationToken = default);
-    Task CreateAsync(TEntity entity, CancellationToken cancellationToken = default);
-    Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
-    Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
+    List<TEntity> GetAll(int page, int size);
+    TEntity? GetById(TKey id);
+    bool Exists(TKey id);
+    void Create(TEntity entity);
+    void Update(TEntity entity);
+    void Delete(TEntity entity);
 }

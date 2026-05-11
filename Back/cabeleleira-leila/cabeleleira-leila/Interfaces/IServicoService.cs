@@ -5,6 +5,6 @@ namespace cabeleleira_leila.Interfaces;
 
 public interface IServicoService : IBaseService<ServicoRequestDto, ServicoUpdateRequestDto, ServicoResponseDto, long>
 {
-    Task<OperationResult<ServicoResponseDto>> CreateAsync(ServicoRequestDto request, CancellationToken cancellationToken = default);
-    Task<OperationResult<ServicoResponseDto>> UpdateAsync(long id, ServicoUpdateRequestDto request, CancellationToken cancellationToken = default);
+    OperationResult<ServicoResponseDto> Create(ServicoRequestDto request);
+    OperationResult<ServicoResponseDto> Update(long id, ServicoUpdateRequestDto request);
 }

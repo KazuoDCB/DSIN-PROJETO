@@ -9,6 +9,7 @@ public class ClienteResponseDto
     public string Number { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public Status Status { get; set; }
+    public UserRole Role { get; set; } = UserRole.Cliente;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }

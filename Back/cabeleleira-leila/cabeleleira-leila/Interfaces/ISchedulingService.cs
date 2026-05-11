@@ -5,10 +5,10 @@ namespace cabeleleira_leila.Interfaces;
 
 public interface ISchedulingService : IBaseService<SchedulingRequestDto, SchedulingUpdateRequestDto, SchedulingResponseDto, long>
 {
-    Task<OperationResult<List<SchedulingResponseDto>>> GetByClienteAsync(long clienteId, DateTime? start, DateTime? end, CancellationToken cancellationToken = default);
-    Task<OperationResult<SchedulingResponseDto>> GetSameWeekSuggestionAsync(long clienteId, DateTime dataHora, CancellationToken cancellationToken = default);
-    Task<OperationResult<SchedulingResponseDto>> CreateAsync(SchedulingRequestDto request, CancellationToken cancellationToken = default);
-    Task<OperationResult<SchedulingResponseDto>> UpdateAsync(long id, SchedulingUpdateRequestDto request, CancellationToken cancellationToken = default);
-    Task<OperationResult<SchedulingResponseDto>> AdminUpdateAsync(long id, SchedulingUpdateRequestDto request, CancellationToken cancellationToken = default);
-    Task<OperationResult<SchedulingResponseDto>> UpdateStatusAsync(long id, SchedulingStatusUpdateRequestDto request, CancellationToken cancellationToken = default);
+    OperationResult<List<SchedulingResponseDto>> GetByCliente(long clienteId, DateTime? start, DateTime? end);
+    OperationResult<SchedulingResponseDto> GetSameWeekSuggestion(long clienteId, DateTime dataHora);
+    OperationResult<SchedulingResponseDto> Create(SchedulingRequestDto request);
+    OperationResult<SchedulingResponseDto> Update(long id, SchedulingUpdateRequestDto request);
+    OperationResult<SchedulingResponseDto> AdminUpdate(long id, SchedulingUpdateRequestDto request);
+    OperationResult<SchedulingResponseDto> UpdateStatus(long id, SchedulingStatusUpdateRequestDto request);
 }
