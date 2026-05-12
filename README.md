@@ -11,14 +11,14 @@ Sistema web para gestao de um salao de beleza, com area publica para clientes, a
 - JWT Bearer Authentication
 - Argon2Id para hash de senha
 - Mapster para mapeamento entre entidades e DTOs
-- OpenAPI nativo do ASP.NET Core
+
 
 ### Frontend
 - React 19
 - TypeScript 6
 - Vite 8
 - React Router DOM
-- CSS modularizado por responsabilidade em `src/styles`
+
 
 ## Requisitos
 
